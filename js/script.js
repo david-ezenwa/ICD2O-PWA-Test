@@ -11,28 +11,31 @@ function findTriangleClicked() {
   const side2 = parseFloat(document.getElementById("side2-entered").value)
   const side3 = parseFloat(document.getElementById("side3-entered").value)
 
-  // using the cosine law
+  // Check if the sides can form a triangle
+  if (side1 + side2 <= side3 || side1 + side3 <= side2 || side2 + side3 <= side1) {
+    document.getElementById("answer").innerHTML = "The given sides do not form a valid triangle."
+    return
+  }
+
+  // Using the cosine law to find the angles
   const angleA = Math.acos((side2 ** 2 + side3 ** 2 - side1 ** 2) / (2 * side2 * side3)) * (180 / Math.PI)
   const angleB = Math.acos((side3 ** 2 + side1 ** 2 - side2 ** 2) / (2 * side3 * side1)) * (180 / Math.PI)
   const angleC = Math.acos((side1 ** 2 + side2 ** 2 - side3 ** 2) / (2 * side1 * side2)) * (180 / Math.PI)
 
-  const sumOfAngles = Math.round(Number((angleA).toFixed(2)) + Number((angleB).toFixed(2)) + Number((angleC).toFixed(2)))
+  // Check if the sum of angles is approximately 180 degrees
+  const sumOfAngles = Math.round(angleA + angleB + angleC)
 
-  console.log(sumOfAngles)
+  if (sumOfAngles !== 180) {
+    document.getElementById("answer").innerHTML = "Error: The angles do not add up to 180 degrees."
+    return
+  }
 
-  if ((side1 == side2) && (side2 == side3)) {
-    if (sumOfAngles == 180) {
-      document.getElementById("answer").innerHTML = "This is an equilateral triangle."
-    }
-  } else if ((side1 == side2) || (side1 == side3) || (side2 == side3)) {
-    if (sumOfAngles == 180) {
-      document.getElementById("answer").innerHTML = " This is an isosceles triangle."
-    }
-  } else if ((side1 != side2) && (side2 != side3) && (side1 != side3)) {
-    if (sumOfAngles == 180) {
-      document.getElementById("answer").innerHTML = "This is a scalene triangle."
-    }
+  // Determine the type of triangle
+  if (side1 === side2 && side2 === side3) {
+    document.getElementById("answer").innerHTML = "This is an equilateral triangle."
+  } else if (side1 === side2 || side1 === side3 || side2 === side3) {
+    document.getElementById("answer").innerHTML = "This is an isosceles triangle."
   } else {
-    document.getElementById("answer").innerHTML = "Error"
+    document.getElementById("answer").innerHTML = "This is a scalene triangle."
   }
 }
